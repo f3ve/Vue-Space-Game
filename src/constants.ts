@@ -1,10 +1,14 @@
 const KEY_LEFT = 'KeyA';
 const KEY_RIGHT = 'KeyD';
 const KEY_SPACE = 'Space';
+
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
+
 const MOVE_VALUE = 5;
+
 const PLAYER_WIDTH = 20;
+const PLAYER_MAX_SPEED = 600;
 
 export {
   KEY_LEFT,
@@ -14,4 +18,5 @@ export {
   GAME_HEIGHT,
   MOVE_VALUE,
   PLAYER_WIDTH,
+  PLAYER_MAX_SPEED,
 };

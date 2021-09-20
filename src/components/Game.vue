@@ -14,6 +14,7 @@ import {
   GAME_HEIGHT,
   MOVE_VALUE,
   PLAYER_WIDTH,
+  PLAYER_MAX_SPEED,
 } from '@/constants.ts';
 
 export default {
@@ -21,6 +22,7 @@ export default {
   setup() {
     const player = ref<HTMLElement | null>(null);
     const gameState = ref({
+      lastTime: Date.now(),
       playerX: 0,
       playerY: 0,
       leftPressed: false,
@@ -79,14 +81,16 @@ export default {
       );
     }
 
-    // Updates player position when left or right keys are pressed
-    function updatePlayer() {
+    /**
+     * Updates player position when left or right keys are pressed
+     */
+    function updatePlayer(deltaTime: number) {
       if (gameState.value.leftPressed) {
-        gameState.value.playerX -= MOVE_VALUE;
+        gameState.value.playerX -= deltaTime * PLAYER_MAX_SPEED;
       }
 
       if (gameState.value.rightPressed) {
-        gameState.value.playerX += MOVE_VALUE;
+        gameState.value.playerX += deltaTime * PLAYER_MAX_SPEED;
       }
 
       // Prevent moving out of bounds
@@ -121,7 +125,12 @@ export default {
      * Handles smooth movement animation when moving player
      */
     function update() {
-      updatePlayer();
+      const currentTime = Date.now();
+      const deltaTime = (currentTime - gameState.value.lastTime) / 1000.0;
+
+      updatePlayer(deltaTime);
+
+      gameState.value.lastTime = currentTime;
       window.requestAnimationFrame(update);
     }
 
