@@ -17,21 +17,22 @@ export default {
       playerY: 0,
       leftPressed: false,
       rightPressed: false,
-      spacePressed: true,
+      spacePressed: false,
       playerCooldown: 0,
       lasers: [],
     });
 
-    const { player } = usePlayer(gameState.value);
+    const { player, gameRoot } = usePlayer(gameState.value);
 
     return {
       player,
+      gameRoot,
     };
   },
 };
 </script>
 
-<style scoped>
+<style>
 #game-root {
   width: 800px;
   height: 600px;
@@ -42,5 +43,13 @@ export default {
   height: 20px;
   width: 20px;
   background-color: blue;
+}
+
+.player-laser {
+  background-color: limegreen;
+  height: 20px;
+  width: 2px;
+  position: absolute;
+  margin-left: 9px;
 }
 </style>
