@@ -42,6 +42,12 @@ export function shootLaser(
   }
 }
 
+/**
+ * Moves lasers towards the top of the screen. If they exceed bounds of game they are deleted.
+ * @param laser
+ * @param dt
+ * @param gameRoot
+ */
 export function moveLaser(
   laser: Laser,
   dt: number,

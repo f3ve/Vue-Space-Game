@@ -4,6 +4,10 @@ import { GameState } from '@/types';
 import { moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
 
+/**
+ * Initializes the player and handles movement of player and the player's fired lasers
+ * @param gameState
+ */
 export default function usePlayer(gameState: UnwrapRef<GameState>): {
   player: Ref<HTMLElement | null>;
   gameRoot: Ref<HTMLElement | null>;
@@ -11,13 +15,17 @@ export default function usePlayer(gameState: UnwrapRef<GameState>): {
   const gameRoot = ref<HTMLElement | null>(null);
   const player = ref<HTMLElement | null>(null);
 
-  function updatePlayer(dt: number) {
+  /**
+   * Updates player position based on current delta time
+   * @param deltaTime
+   */
+  function updatePlayer(deltaTime: number) {
     if (gameState.leftPressed) {
-      movePlayer('left', dt, gameState);
+      movePlayer('left', deltaTime, gameState);
     }
 
     if (gameState.rightPressed) {
-      movePlayer('right', dt, gameState);
+      movePlayer('right', deltaTime, gameState);
     }
 
     if (gameState.spacePressed && gameState.playerCooldown <= 0) {
@@ -25,12 +33,16 @@ export default function usePlayer(gameState: UnwrapRef<GameState>): {
     }
 
     if (gameState.playerCooldown > 0) {
-      gameState.playerCooldown -= dt;
+      gameState.playerCooldown -= deltaTime;
     }
 
     setPosition(player.value, gameState.playerX, gameState.playerY);
   }
 
+  /**
+   * Updates lasers position based on current delta time
+   * @param deltaTime
+   */
   function updateLasers(deltaTime: number) {
     const lasers = gameState.lasers;
     lasers.forEach((laser) => {
