@@ -8,3 +8,10 @@ export interface GameState {
   playerCooldown: number;
   lasers: { x: number; y: number; $el: HTMLElement; isDead: boolean }[];
 }
+
+export interface Laser {
+  x: number;
+  y: number;
+  $el: HTMLElement;
+  isDead: boolean;
+}
