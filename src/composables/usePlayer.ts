@@ -1,19 +1,21 @@
-import { onMounted, Ref, ref, UnwrapRef } from 'vue';
+import { onMounted, Ref, ref} from 'vue';
 import { initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
-import { GameState } from '@/types';
+import { Game, DOMRef, ElOrNull } from '@/types';
 import { moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
+
+interface usePlayerOutput {
+  player: DOMRef;
+  gameRoot: DOMRef;
+}
 
 /**
  * Initializes the player and handles movement of player and the player's fired lasers
  * @param gameState
  */
-export default function usePlayer(gameState: UnwrapRef<GameState>): {
-  player: Ref<HTMLElement | null>;
-  gameRoot: Ref<HTMLElement | null>;
-} {
-  const gameRoot = ref<HTMLElement | null>(null);
-  const player = ref<HTMLElement | null>(null);
+export default function usePlayer(gameState: Game): usePlayerOutput {
+  const gameRoot = ref<ElOrNull>(null);
+  const player = ref<ElOrNull>(null);
 
   /**
    * Updates player position based on current delta time

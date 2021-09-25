@@ -1,5 +1,4 @@
-import { Laser } from '@/types';
-import { Ref } from 'vue';
+import { Laser, DOMRef } from '@/types';
 
 /**
  * Adds laser to the DOM
@@ -17,10 +16,7 @@ export function createLaser($container: HTMLElement): HTMLElement {
  * @param laser
  * @param gameRoot
  */
-export function destroyLaser(
-  laser: Laser,
-  gameRoot: Ref<HTMLElement | null>
-): void {
+export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
   if (gameRoot.value) {
     laser.$el.remove();
     laser.isDead = true;

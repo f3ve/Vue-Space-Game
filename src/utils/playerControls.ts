@@ -1,8 +1,9 @@
 import * as C from '@/constants';
-import { GameState, Laser } from '@/types';
-import { Ref, UnwrapRef } from 'vue';
+import { DOMRef, ElOrNull, Game, Laser } from '@/types';
 import { clamp, setPosition } from '@/utils/generalHelpers';
 import { createLaser, destroyLaser } from '@/utils/DOMhelpers';
+
+type Dir = 'left' | 'right';
 
 /**
  * Updates player's x position value
@@ -10,11 +11,7 @@ import { createLaser, destroyLaser } from '@/utils/DOMhelpers';
  * @param dt - delta time
  * @param gameState
  */
-export function movePlayer(
-  direction: 'left' | 'right',
-  dt: number,
-  gameState: UnwrapRef<GameState>
-): void {
+export function movePlayer(direction: Dir, dt: number, gameState: Game): void {
   direction === 'left'
     ? (gameState.playerX -= dt * C.PLAYER_MAX_SPEED)
     : (gameState.playerX += dt * C.PLAYER_MAX_SPEED);
@@ -27,10 +24,7 @@ export function movePlayer(
  * @param $container
  * @param gameState
  */
-export function shootLaser(
-  $container: HTMLElement | null,
-  gameState: UnwrapRef<GameState>
-): void {
+export function shootLaser($container: ElOrNull, gameState: Game): void {
   const { playerX: x, playerY: y } = gameState;
 
   if ($container) {
@@ -48,11 +42,7 @@ export function shootLaser(
  * @param dt
  * @param gameRoot
  */
-export function moveLaser(
-  laser: Laser,
-  dt: number,
-  gameRoot: Ref<HTMLElement | null>
-): void {
+export function moveLaser(laser: Laser, dt: number, gameRoot: DOMRef): void {
   laser.y -= dt * C.LASER_MAX_SPEED;
   if (laser.y < 0) destroyLaser(laser, gameRoot);
   setPosition(laser.$el, laser.x, laser.y);

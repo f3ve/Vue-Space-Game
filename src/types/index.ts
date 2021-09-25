@@ -1,3 +1,5 @@
+import { UnwrapRef, Ref } from 'vue';
+
 export interface GameState {
   lastTime: number;
   playerX: number;
@@ -15,3 +17,7 @@ export interface Laser {
   $el: HTMLElement;
   isDead: boolean;
 }
+
+export type Game = UnwrapRef<GameState>;
+export type ElOrNull = HTMLElement | null;
+export type DOMRef = Ref<ElOrNull>;
