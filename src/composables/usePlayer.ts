@@ -1,5 +1,5 @@
-import { onMounted, Ref, ref} from 'vue';
-import { initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
+import { onMounted, ref } from 'vue';
+import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
 import { moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
@@ -52,6 +52,19 @@ export default function usePlayer(gameState: Game): usePlayerOutput {
     });
   }
 
+  function updateEnemies(dt: number) {
+    const dx = Math.sin(gameState.lastTime / 1000.0) * 50;
+    const dy = Math.cos(gameState.lastTime / 1000.0) * 50;
+
+    const { enemies } = gameState;
+
+    enemies.forEach((enemy) => {
+      const x = enemy.x + dx;
+      const y = enemy.y + dy;
+      setPosition(enemy.$el, x, y);
+    });
+  }
+
   /**
    * Handles smooth movement animation when moving player
    */
@@ -61,14 +74,16 @@ export default function usePlayer(gameState: Game): usePlayerOutput {
 
     updatePlayer(deltaTime);
     updateLasers(deltaTime);
+    updateEnemies(deltaTime);
 
     gameState.lastTime = currentTime;
     window.requestAnimationFrame(updateGame);
   }
 
   onMounted(() => {
-    initialPlayerPosition(player, gameState);
+    initialPlayerPosition({ player, gameState });
     initializeKeyboardControls(gameState);
+    initializeEnemies(gameState, gameRoot);
     window.requestAnimationFrame(updateGame);
   });
 

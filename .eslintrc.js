@@ -22,6 +22,7 @@ module.exports = {
         tabWidth: 2,
         endOfLine: "auto",
         arrowParens: "always",
+        printWidth: 100,
       },
     ],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

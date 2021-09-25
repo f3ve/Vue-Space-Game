@@ -20,6 +20,7 @@ export default {
       spacePressed: false,
       playerCooldown: 0,
       lasers: [],
+      enemies: [],
     });
 
     const { player, gameRoot } = usePlayer(gameState.value);
@@ -51,5 +52,14 @@ export default {
   width: 2px;
   position: absolute;
   margin-left: 9px;
+}
+
+.enemy {
+  background-color: red;
+  position: absolute;
+  margin-left: -20px;
+  margin-top: -18px;
+  width: 40px;
+  height: 40px;
 }
 </style>
