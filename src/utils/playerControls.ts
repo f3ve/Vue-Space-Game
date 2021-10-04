@@ -1,7 +1,7 @@
 import * as C from '@/constants';
-import { DOMRef, ElOrNull, Game, Laser } from '@/types';
+import { DOMRef, ElOrNull, Game, GameState, Laser } from '@/types';
 import { clamp, setPosition } from '@/utils/generalHelpers';
-import { createLaser, destroyLaser } from '@/utils/DOMhelpers';
+import { createLaser, destroyLaser, destroyEnemy, rectsIntersect } from '@/utils/DOMhelpers';
 
 type Dir = 'left' | 'right';
 
@@ -46,4 +46,20 @@ export function moveLaser(laser: Laser, dt: number, gameRoot: DOMRef): void {
   laser.y -= dt * C.LASER_MAX_SPEED;
   if (laser.y < 0) destroyLaser(laser, gameRoot);
   setPosition(laser.$el, laser.x, laser.y);
+}
+
+export function hitDetection(enemies: GameState['enemies'], laser: Laser, gameRoot: DOMRef): void {
+  const r1 = laser.$el.getBoundingClientRect();
+  for (let j = 0; j < enemies.length; j++) {
+    const enemy = enemies[j];
+    if (enemy.isDead) continue;
+    const r2 = enemy.$el.getBoundingClientRect();
+    if (rectsIntersect(r1, r2)) {
+      console.log('yay');
+      // Enemy was hit
+      destroyEnemy(enemy);
+      destroyLaser(laser, gameRoot);
+      break;
+    }
+  }
 }

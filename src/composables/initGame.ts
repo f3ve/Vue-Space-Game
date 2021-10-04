@@ -1,7 +1,7 @@
 import { onMounted, ref } from 'vue';
 import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
-import { moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
+import { hitDetection, moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
 
 interface usePlayerOutput {
@@ -13,7 +13,7 @@ interface usePlayerOutput {
  * Initializes the player and handles movement of player and the player's fired lasers
  * @param gameState
  */
-export default function usePlayer(gameState: Game): usePlayerOutput {
+export default function initGame(gameState: Game): usePlayerOutput {
   const gameRoot = ref<ElOrNull>(null);
   const player = ref<ElOrNull>(null);
 
@@ -46,9 +46,11 @@ export default function usePlayer(gameState: Game): usePlayerOutput {
    * @param deltaTime
    */
   function updateLasers(deltaTime: number) {
-    const lasers = gameState.lasers;
+    const { lasers, enemies } = gameState;
+
     lasers.forEach((laser) => {
       moveLaser(laser, deltaTime, gameRoot);
+      hitDetection(enemies, laser, gameRoot);
     });
   }
 
@@ -63,6 +65,8 @@ export default function usePlayer(gameState: Game): usePlayerOutput {
       const y = enemy.y + dy;
       setPosition(enemy.$el, x, y);
     });
+
+    gameState.enemies = gameState.enemies.filter((e) => !e.isDead);
   }
 
   /**

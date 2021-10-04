@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import usePlayer from '@/composables/usePlayer.ts';
+import initGame from '@/composables/initGame.ts';
 
 export default {
   name: 'Game',
@@ -23,7 +23,7 @@ export default {
       enemies: [],
     });
 
-    const { player, gameRoot } = usePlayer(gameState.value);
+    const { player, gameRoot } = initGame(gameState.value);
 
     return {
       player,

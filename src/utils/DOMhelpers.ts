@@ -30,7 +30,7 @@ export function createEnemy(gameState: Game, $root: DOMRef, x: number, y: number
     const $el = document.createElement('div');
     $el.classList.add('enemy');
     $root.value.appendChild($el);
-    const enemy = { x, y, $el };
+    const enemy = { x, y, $el, isDead: false };
     gameState.enemies.push(enemy);
     setPosition(enemy.$el, x, y);
   }
@@ -46,4 +46,13 @@ export function createEnemies(gameState: Game, $root: DOMRef): void {
       createEnemy(gameState, $root, x, y);
     }
   }
+}
+
+export function destroyEnemy(enemy: { isDead: boolean; $el: HTMLElement }): void {
+  enemy.$el.remove();
+  enemy.isDead = true;
+}
+
+export function rectsIntersect(r1: DOMRect, r2: DOMRect) {
+  return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
 }
