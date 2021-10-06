@@ -25,6 +25,11 @@ export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
   }
 }
 
+export function destroyPlayer(gameState: Game, player: DOMRef): void {
+  player.value?.remove();
+  gameState.gameOver = true;
+}
+
 export function createEnemy(gameState: Game, $root: DOMRef, x: number, y: number): void {
   if ($root.value) {
     const $el = document.createElement('div');

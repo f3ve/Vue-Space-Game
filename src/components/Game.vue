@@ -23,6 +23,7 @@ export default {
       spacePressed: false,
       enemies: [],
       enemyLasers: [],
+      gameOver: false,
     });
 
     const { player, gameRoot } = initGame(gameState.value);
