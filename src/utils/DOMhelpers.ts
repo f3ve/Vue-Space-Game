@@ -1,5 +1,5 @@
 import { Laser, DOMRef, Game } from '@/types';
-import { setPosition } from '@/utils/generalHelpers';
+import { random, setPosition } from '@/utils/generalHelpers';
 import * as C from '@/constants';
 
 /**
@@ -28,7 +28,7 @@ export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
 export function createEnemy(gameState: Game, $root: DOMRef, x: number, y: number): void {
   if ($root.value) {
     const $el = document.createElement('div');
-    const enemy = { x, y, $el, isDead: false, cooldown: 0 };
+    const enemy = { x, y, $el, isDead: false, cooldown: random(0, C.ENEMY_COOLDOWN) };
 
     // Style enemy element and add to DOM
     $el.classList.add('enemy');

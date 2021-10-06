@@ -21,6 +21,10 @@ export function clamp(val: number, min = 0, max = C.GAME_WIDTH - C.PLAYER_WIDTH)
   return val;
 }
 
+export function random(min = 0, max = 1): number {
+  return min + Math.random() * (max - min);
+}
+
 export function setPosition($el: ElOrNull, x: number, y: number): void {
   if ($el) {
     $el.style.transform = `translate(${x}px, ${y}px)`;

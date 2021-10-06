@@ -15,4 +15,4 @@ export const ENEMIES_PER_ROW = 10;
 export const ENEMY_HORIZONTAL_PADDING = 80;
 export const ENEMY_VERTICAL_PADDING = 70;
 export const ENEMY_VERTICAL_SPACING = 80;
-export const ENEMY_COOLDOWN = 2.0;
+export const ENEMY_COOLDOWN = 3.0;
