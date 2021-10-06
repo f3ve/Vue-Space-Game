@@ -2,6 +2,9 @@
   <div id="game-root" ref="gameRoot">
     <div id="player" ref="player" />
   </div>
+  <div>
+    <p>Move with left and right arrows. Press space to shoot.</p>
+  </div>
 </template>
 
 <script lang="ts">
