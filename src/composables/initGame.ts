@@ -1,8 +1,16 @@
 import { onMounted, ref } from 'vue';
 import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
-import { hitDetection, moveLaser, movePlayer, shootLaser } from '@/utils/playerControls';
+import {
+  hitDetection,
+  moveLaser,
+  movePlayer,
+  shootEnemyLaser,
+  shootLaser,
+} from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
+import { destroyLaser } from '@/utils/DOMhelpers';
+import { GAME_HEIGHT, LASER_MAX_SPEED } from '@/constants';
 
 interface usePlayerOutput {
   player: DOMRef;
@@ -54,16 +62,31 @@ export default function initGame(gameState: Game): usePlayerOutput {
     });
   }
 
-  function updateEnemies(dt: number) {
+  function updateEnemyLasers(deltaTime: number): void {
+    const { enemyLasers: lasers } = gameState;
+    lasers.forEach((laser) => {
+      laser.y += deltaTime * LASER_MAX_SPEED;
+      if (laser.y > GAME_HEIGHT) {
+        destroyLaser(laser, gameRoot);
+      }
+      setPosition(laser.$el, laser.x, laser.y);
+    });
+
+    gameState.enemyLasers = gameState.enemyLasers.filter((laser) => !laser.isDead);
+  }
+
+  function updateEnemies(deltaTime: number) {
     const dx = Math.sin(gameState.lastTime / 1000.0) * 50;
     const dy = Math.cos(gameState.lastTime / 1000.0) * 50;
 
     const { enemies } = gameState;
 
     enemies.forEach((enemy) => {
-      const x = enemy.x + dx;
-      const y = enemy.y + dy;
-      setPosition(enemy.$el, x, y);
+      setPosition(enemy.$el, enemy.x + dx, enemy.y + dy);
+      enemy.cooldown -= deltaTime;
+      if (enemy.cooldown <= 0) {
+        shootEnemyLaser(gameRoot.value, gameState, enemy);
+      }
     });
 
     gameState.enemies = gameState.enemies.filter((e) => !e.isDead);
@@ -79,6 +102,7 @@ export default function initGame(gameState: Game): usePlayerOutput {
     updatePlayer(deltaTime);
     updateLasers(deltaTime);
     updateEnemies(deltaTime);
+    updateEnemyLasers(deltaTime);
 
     gameState.lastTime = currentTime;
     window.requestAnimationFrame(updateGame);

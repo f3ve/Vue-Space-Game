@@ -1,15 +1,16 @@
 <template>
   <div id="game-root" ref="gameRoot">
-    <div id="player" ref="player"></div>
+    <div id="player" ref="player" />
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue';
-import initGame from '@/composables/initGame.ts';
+import initGame from '@/composables/initGame';
 
 export default {
   name: 'Game',
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const gameState = ref({
       lastTime: Date.now(),
@@ -17,9 +18,9 @@ export default {
       playerY: 0,
       leftPressed: false,
       rightPressed: false,
-      spacePressed: false,
       playerCooldown: 0,
       lasers: [],
+      spacePressed: false,
       enemies: [],
       enemyLasers: [],
     });
@@ -49,6 +50,14 @@ export default {
 
 .player-laser {
   background-color: limegreen;
+  height: 20px;
+  width: 2px;
+  position: absolute;
+  margin-left: 9px;
+}
+
+.enemy-laser {
+  background-color: red;
   height: 20px;
   width: 2px;
   position: absolute;

@@ -9,7 +9,7 @@ export interface GameState {
   spacePressed: boolean;
   playerCooldown: number;
   lasers: { x: number; y: number; $el: HTMLElement; isDead: boolean }[];
-  enemies: { x: number; y: number; $el: HTMLElement; isDead: boolean }[];
+  enemies: { x: number; y: number; $el: HTMLElement; isDead: boolean; cooldown: number }[];
   enemyLasers: { x: number; y: number; $el: HTMLElement; isDead: boolean }[];
 }
 

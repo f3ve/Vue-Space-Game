@@ -36,6 +36,22 @@ export function shootLaser($container: ElOrNull, gameState: Game): void {
   }
 }
 
+export function shootEnemyLaser(
+  $container: ElOrNull,
+  gameState: Game,
+  enemy: GameState['enemies'][0]
+): void {
+  const { x, y } = enemy;
+
+  if ($container) {
+    const $el = createLaser($container, true);
+    const laser = { x, y, $el, isDead: false };
+    gameState.enemyLasers.push(laser);
+    setPosition($el, x, y);
+    enemy.cooldown = C.ENEMY_COOLDOWN;
+  }
+}
+
 /**
  * Moves lasers towards the top of the screen. If they exceed bounds of game they are deleted.
  * @param laser

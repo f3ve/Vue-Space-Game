@@ -6,9 +6,9 @@ import * as C from '@/constants';
  * Adds laser to the DOM
  * @param $container
  */
-export function createLaser($container: HTMLElement): HTMLElement {
+export function createLaser($container: HTMLElement, enemy = false): HTMLElement {
   const $laser = document.createElement('div');
-  $laser.classList.add('player-laser');
+  $laser.classList.add(enemy ? 'enemy-laser' : 'player-laser');
   $container.appendChild($laser);
   return $laser;
 }
@@ -28,9 +28,13 @@ export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
 export function createEnemy(gameState: Game, $root: DOMRef, x: number, y: number): void {
   if ($root.value) {
     const $el = document.createElement('div');
+    const enemy = { x, y, $el, isDead: false, cooldown: 0 };
+
+    // Style enemy element and add to DOM
     $el.classList.add('enemy');
     $root.value.appendChild($el);
-    const enemy = { x, y, $el, isDead: false };
+
+    // Add enemy to gameState and set it's position
     gameState.enemies.push(enemy);
     setPosition(enemy.$el, x, y);
   }
@@ -53,6 +57,6 @@ export function destroyEnemy(enemy: { isDead: boolean; $el: HTMLElement }): void
   enemy.isDead = true;
 }
 
-export function rectsIntersect(r1: DOMRect, r2: DOMRect) {
+export function rectsIntersect(r1: DOMRect, r2: DOMRect): boolean {
   return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
 }
