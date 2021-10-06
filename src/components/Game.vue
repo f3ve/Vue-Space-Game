@@ -21,6 +21,7 @@ export default {
       playerCooldown: 0,
       lasers: [],
       enemies: [],
+      enemyLasers: [],
     });
 
     const { player, gameRoot } = initGame(gameState.value);
