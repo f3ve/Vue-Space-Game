@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue';
+import { ComputedRef, onMounted, ref } from 'vue';
 import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
 import {
@@ -58,7 +58,7 @@ export default function initGame(gameState: Game): usePlayerOutput {
 
     lasers.forEach((laser) => {
       moveLaser(laser, deltaTime, gameRoot);
-      hitDetection(enemies, laser, gameRoot);
+      hitDetection(gameState, laser, gameRoot);
     });
   }
 
@@ -107,6 +107,10 @@ export default function initGame(gameState: Game): usePlayerOutput {
   function updateGame() {
     const currentTime = Date.now();
     const deltaTime = (currentTime - gameState.lastTime) / 1000.0;
+
+    if (gameState.won) {
+      return;
+    }
 
     if (gameState.gameOver) {
       return;

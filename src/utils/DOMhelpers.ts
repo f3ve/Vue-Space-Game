@@ -26,7 +26,7 @@ export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
 }
 
 export function destroyPlayer(gameState: Game, player: DOMRef): void {
-  player.value?.remove();
+  // player.value?.remove();
   gameState.gameOver = true;
 }
 

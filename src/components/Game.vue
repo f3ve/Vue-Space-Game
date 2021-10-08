@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import initGame from '@/composables/initGame';
 
 export default {
@@ -27,6 +27,7 @@ export default {
       enemies: [],
       enemyLasers: [],
       gameOver: false,
+      won: false,
     });
 
     const { player, gameRoot } = initGame(gameState.value);

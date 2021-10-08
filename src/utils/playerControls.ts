@@ -64,16 +64,19 @@ export function moveLaser(laser: Laser, dt: number, gameRoot: DOMRef): void {
   setPosition(laser.$el, laser.x, laser.y);
 }
 
-export function hitDetection(enemies: GameState['enemies'], laser: Laser, gameRoot: DOMRef): void {
+export function hitDetection(gameState: GameState, laser: Laser, gameRoot: DOMRef): void {
+  const enemies = gameState.enemies;
   const r1 = laser.$el.getBoundingClientRect();
   for (let j = 0; j < enemies.length; j++) {
     const enemy = enemies[j];
     if (enemy.isDead) continue;
     const r2 = enemy.$el.getBoundingClientRect();
     if (rectsIntersect(r1, r2)) {
-      console.log('yay');
       // Enemy was hit
       destroyEnemy(enemy);
+      if (enemies.length === 1) {
+        gameState.won = true;
+      }
       destroyLaser(laser, gameRoot);
       break;
     }

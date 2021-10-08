@@ -12,6 +12,7 @@ export interface GameState {
   enemies: { x: number; y: number; $el: HTMLElement; isDead: boolean; cooldown: number }[];
   enemyLasers: { x: number; y: number; $el: HTMLElement; isDead: boolean }[];
   gameOver: boolean;
+  won: boolean;
 }
 
 export interface Laser {
