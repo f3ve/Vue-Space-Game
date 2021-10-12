@@ -74,6 +74,7 @@ export function hitDetection(gameState: GameState, laser: Laser, gameRoot: DOMRe
     if (rectsIntersect(r1, r2)) {
       // Enemy was hit
       destroyEnemy(enemy);
+      gameState.score++;
       if (enemies.length === 1) {
         gameState.won = true;
       }

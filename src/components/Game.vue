@@ -1,14 +1,15 @@
 <template>
-  <div id="game-root" ref="gameRoot">
-    <div id="player" ref="player" />
+  <div id="game-root" ref="gameRoot" @click="pause">
+    <img id="player" ref="player" src="@/assets/playerShip3_blue.png" />
   </div>
   <div>
     <p>Move with left and right arrows. Press space to shoot.</p>
+    <p>{{ gameState.score }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { ref } from 'vue';
 import initGame from '@/composables/initGame';
 
 export default {
@@ -19,22 +20,30 @@ export default {
       lastTime: Date.now(),
       playerX: 0,
       playerY: 0,
+      playerCooldown: 0,
       leftPressed: false,
       rightPressed: false,
-      playerCooldown: 0,
-      lasers: [],
       spacePressed: false,
-      enemies: [],
-      enemyLasers: [],
       gameOver: false,
       won: false,
+      lasers: [],
+      enemies: [],
+      enemyLasers: [],
+      paused: false,
+      score: 0,
     });
 
     const { player, gameRoot } = initGame(gameState.value);
 
+    function pause() {
+      gameState.value.paused = !gameState.value.paused;
+    }
+
     return {
       player,
       gameRoot,
+      gameState,
+      pause,
     };
   },
 };
@@ -44,13 +53,25 @@ export default {
 #game-root {
   width: 800px;
   height: 600px;
-  background-color: #efefef;
+  background: url('~@/assets/darkPurple.png');
+  /* background: repeat; */
+  animation: slide 5s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    background-position-y: 0px;
+  }
+
+  to {
+    background-position-y: 246px;
+  }
 }
 
 #player {
   height: 20px;
   width: 20px;
-  background-color: blue;
+  /* background-color: blue; */
 }
 
 .player-laser {
@@ -70,7 +91,7 @@ export default {
 }
 
 .enemy {
-  background-color: red;
+  /* background-color: red; */
   position: absolute;
   margin-left: -20px;
   margin-top: -18px;

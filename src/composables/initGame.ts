@@ -75,7 +75,7 @@ export default function initGame(gameState: Game): usePlayerOutput {
       const playerPos = player.value?.getBoundingClientRect();
       if (playerPos) {
         if (rectsIntersect(laserPos, playerPos)) {
-          destroyPlayer(gameState, player);
+          destroyPlayer(gameState);
           destroyLaser(laser, gameRoot);
         }
       }
@@ -109,17 +109,20 @@ export default function initGame(gameState: Game): usePlayerOutput {
     const deltaTime = (currentTime - gameState.lastTime) / 1000.0;
 
     if (gameState.won) {
-      return;
+      initializeEnemies(gameState, gameRoot);
+      gameState.won = false;
     }
 
     if (gameState.gameOver) {
       return;
     }
 
-    updatePlayer(deltaTime);
-    updateLasers(deltaTime);
-    updateEnemies(deltaTime);
-    updateEnemyLasers(deltaTime);
+    if (!gameState.paused) {
+      updatePlayer(deltaTime);
+      updateLasers(deltaTime);
+      updateEnemies(deltaTime);
+      updateEnemyLasers(deltaTime);
+    }
 
     gameState.lastTime = currentTime;
     window.requestAnimationFrame(updateGame);

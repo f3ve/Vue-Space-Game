@@ -1,6 +1,7 @@
 import { Laser, DOMRef, Game } from '@/types';
 import { random, setPosition } from '@/utils/generalHelpers';
 import * as C from '@/constants';
+// import img from '@/assets/enemyRed5png';
 
 /**
  * Adds laser to the DOM
@@ -25,18 +26,18 @@ export function destroyLaser(laser: Laser, gameRoot: DOMRef): void {
   }
 }
 
-export function destroyPlayer(gameState: Game, player: DOMRef): void {
-  // player.value?.remove();
+export function destroyPlayer(gameState: Game): void {
   gameState.gameOver = true;
 }
 
 export function createEnemy(gameState: Game, $root: DOMRef, x: number, y: number): void {
   if ($root.value) {
-    const $el = document.createElement('div');
+    const $el = document.createElement('img');
     const enemy = { x, y, $el, isDead: false, cooldown: random(0, C.ENEMY_COOLDOWN) };
 
     // Style enemy element and add to DOM
     $el.classList.add('enemy');
+    $el.src = require('@/assets/enemyRed5.png');
     $root.value.appendChild($el);
 
     // Add enemy to gameState and set it's position
