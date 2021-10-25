@@ -16,3 +16,21 @@ export const ENEMY_HORIZONTAL_PADDING = 80;
 export const ENEMY_VERTICAL_PADDING = 70;
 export const ENEMY_VERTICAL_SPACING = 80;
 export const ENEMY_COOLDOWN = 5.0;
+
+export const initialState = {
+  lastTime: Date.now(),
+  playerX: 0,
+  playerY: 0,
+  playerCooldown: 0,
+  leftPressed: false,
+  rightPressed: false,
+  spacePressed: false,
+  gameOver: false,
+  won: false,
+  lasers: [],
+  enemies: [],
+  enemyLasers: [],
+  paused: true,
+  score: 0,
+  lasersFired: 0,
+};

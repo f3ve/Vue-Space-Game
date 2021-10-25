@@ -9,8 +9,8 @@ import {
   shootLaser,
 } from '@/utils/playerControls';
 import { initializeKeyboardControls } from '@/utils/KeyboardHelpers';
-import { destroyLaser, destroyPlayer, rectsIntersect } from '@/utils/DOMhelpers';
-import { GAME_HEIGHT, LASER_MAX_SPEED } from '@/constants';
+import { destroyEnemy, destroyLaser, destroyPlayer, rectsIntersect } from '@/utils/DOMhelpers';
+import { GAME_HEIGHT, initialState, LASER_MAX_SPEED } from '@/constants';
 
 interface usePlayerOutput {
   player: DOMRef;
@@ -105,26 +105,39 @@ export default function initGame(gameState: Game): usePlayerOutput {
    * Handles smooth movement animation when moving player
    */
   function updateGame() {
-    const currentTime = Date.now();
-    const deltaTime = (currentTime - gameState.lastTime) / 1000.0;
-
     if (gameState.won) {
       initializeEnemies(gameState, gameRoot);
       gameState.won = false;
     }
 
-    if (gameState.gameOver) {
-      return;
+    if (gameState.gameOver && !gameState.paused) {
+      // gameState.paused = true;
+      // gameState =
+      // gameState.gameOver = false;
+      gameState.enemies.forEach((enemy) => {
+        destroyEnemy(enemy);
+      });
+      gameState.lasers.forEach((laser) => {
+        destroyLaser(laser, gameRoot);
+      });
+      gameState.enemyLasers.forEach((laser) => {
+        destroyLaser(laser, gameRoot);
+      });
+      gameState = initialState;
+      gameState.lastTime = Date.now();
+      gameState.paused = false;
+      initializeEnemies(gameState, gameRoot);
     }
 
-    if (!gameState.paused) {
+    if (!gameState.paused && !gameState.gameOver) {
+      const currentTime = Date.now();
+      const deltaTime = (currentTime - gameState.lastTime) / 1000.0;
       updatePlayer(deltaTime);
       updateLasers(deltaTime);
       updateEnemies(deltaTime);
       updateEnemyLasers(deltaTime);
+      gameState.lastTime = currentTime;
     }
-
-    gameState.lastTime = currentTime;
     window.requestAnimationFrame(updateGame);
   }
 

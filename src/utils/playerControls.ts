@@ -31,6 +31,7 @@ export function shootLaser($container: ElOrNull, gameState: Game): void {
     const $el = createLaser($container);
     const laser = { x, y, $el, isDead: false };
     gameState.lasers.push(laser);
+    gameState.lasersFired++;
     setPosition($el, x, y);
     gameState.playerCooldown = C.LASER_COOLDOWN;
   }
