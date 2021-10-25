@@ -66,7 +66,7 @@ export default function initGame(gameState: Game): usePlayerOutput {
     const { enemyLasers: lasers } = gameState;
     lasers.forEach((laser) => {
       laser.y += deltaTime * LASER_MAX_SPEED;
-      if (laser.y > GAME_HEIGHT) {
+      if (laser.y > GAME_HEIGHT - 40) {
         destroyLaser(laser, gameRoot);
       }
 
@@ -91,7 +91,7 @@ export default function initGame(gameState: Game): usePlayerOutput {
     const { enemies } = gameState;
 
     enemies.forEach((enemy) => {
-      setPosition(enemy.$el, enemy.x + dx, enemy.y + dy);
+      setPosition(enemy.$el, enemy.x + dx - 20, enemy.y + dy);
       enemy.cooldown -= deltaTime;
       if (enemy.cooldown <= 0) {
         shootEnemyLaser(gameRoot.value, gameState, enemy);

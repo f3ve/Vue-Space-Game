@@ -60,8 +60,8 @@ export function shootEnemyLaser(
  */
 export function moveLaser(laser: Laser, dt: number, gameRoot: DOMRef): void {
   laser.y -= dt * C.LASER_MAX_SPEED;
-  if (laser.y < 0) destroyLaser(laser, gameRoot);
   setPosition(laser.$el, laser.x, laser.y);
+  if (laser.y < -30) destroyLaser(laser, gameRoot);
 }
 
 export function hitDetection(gameState: GameState, laser: Laser, gameRoot: DOMRef): void {
