@@ -1,4 +1,4 @@
-import { ComputedRef, onMounted, ref } from 'vue';
+import { watchEffect, ref } from 'vue';
 import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
 import {
@@ -106,14 +106,11 @@ export default function initGame(gameState: Game): usePlayerOutput {
    */
   function updateGame() {
     if (gameState.won) {
-      initializeEnemies(gameState, gameRoot);
-      gameState.won = false;
+      // initializeEnemies(gameState, gameRoot);
+      // gameState.won = false;
     }
 
-    if (gameState.gameOver && !gameState.paused) {
-      // gameState.paused = true;
-      // gameState =
-      // gameState.gameOver = false;
+    if (gameState.gameOver) {
       gameState.enemies.forEach((enemy) => {
         destroyEnemy(enemy);
       });
@@ -123,10 +120,26 @@ export default function initGame(gameState: Game): usePlayerOutput {
       gameState.enemyLasers.forEach((laser) => {
         destroyLaser(laser, gameRoot);
       });
-      gameState = initialState;
-      gameState.lastTime = Date.now();
-      gameState.paused = false;
-      initializeEnemies(gameState, gameRoot);
+      resetGame(gameState);
+      return;
+    }
+
+    function resetGame(gameState: Game) {
+      gameState.lastTime = initialState.lastTime();
+      gameState.playerX = initialState.playerX;
+      gameState.playerY = initialState.playerY;
+      gameState.playerCooldown = initialState.playerCooldown;
+      gameState.leftPressed = initialState.leftPressed;
+      gameState.spacePressed = initialState.spacePressed;
+      gameState.gameOver = initialState.gameOver;
+      gameState.won = initialState.won;
+      gameState.lasers = initialState.lasers;
+      gameState.enemies = initialState.enemies;
+      gameState.enemyLasers = initialState.enemyLasers;
+      gameState.paused = initialState.paused;
+      gameState.score = initialState.score;
+      gameState.lasersFired = initialState.lasersFired;
+      gameState.start = initialState.start;
     }
 
     if (!gameState.paused && !gameState.gameOver) {
@@ -141,11 +154,18 @@ export default function initGame(gameState: Game): usePlayerOutput {
     window.requestAnimationFrame(updateGame);
   }
 
-  onMounted(() => {
-    initialPlayerPosition({ player, gameState });
-    initializeKeyboardControls(gameState);
-    initializeEnemies(gameState, gameRoot);
-    window.requestAnimationFrame(updateGame);
+  watchEffect(() => {
+    if (!gameState.paused && !gameState.gameOver) {
+      window.requestAnimationFrame(updateGame);
+
+      if (gameState.start) {
+        initialPlayerPosition({ player, gameState });
+        initializeKeyboardControls(gameState);
+        initializeEnemies(gameState, gameRoot);
+        gameState.lastTime = initialState.lastTime();
+        gameState.start = false;
+      }
+    }
   });
 
   return {

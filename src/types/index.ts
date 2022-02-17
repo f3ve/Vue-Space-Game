@@ -16,6 +16,7 @@ export interface GameState {
   paused: boolean;
   score: number;
   lasersFired: number;
+  start: boolean;
 }
 
 export interface Laser {

@@ -18,7 +18,9 @@ export const ENEMY_VERTICAL_SPACING = 80;
 export const ENEMY_COOLDOWN = 5.0;
 
 export const initialState = {
-  lastTime: Date.now(),
+  lastTime(): any {
+    return Date.now();
+  },
   playerX: 0,
   playerY: 0,
   playerCooldown: 0,
@@ -33,4 +35,5 @@ export const initialState = {
   paused: true,
   score: 0,
   lasersFired: 0,
+  start: true,
 };

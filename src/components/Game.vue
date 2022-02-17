@@ -4,8 +4,8 @@
   </div>
   <div>
     <p>Move with left and right arrows. Press space to shoot.</p>
-    <p>{{ gameState.score }}</p>
-    <p>{{ accuracy }}</p>
+    <p>Score: {{ gameState.score }}</p>
+    <p>Accuracy: {{ accuracy }}</p>
   </div>
   <div v-if="gameState.paused || gameState.gameOver" class="overlay">
     <p class="countdown" v-if="counting">STARTING IN</p>
@@ -36,6 +36,7 @@ export default {
       enemies: [],
       enemyLasers: [],
       paused: true,
+      start: true,
       score: 0,
       lasersFired: 0,
     });
@@ -56,6 +57,7 @@ export default {
     function start() {
       countDown.value = 3;
       counting.value = true;
+      gameState.value.gameOver = false;
       countInterval = setInterval(() => {
         countDown.value--;
       }, 1000);
