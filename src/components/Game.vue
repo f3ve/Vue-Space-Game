@@ -1,5 +1,5 @@
 <template>
-  <div id="game-root" ref="gameRoot" @click="pause">
+  <div id="game-root" ref="gameRoot">
     <img id="player" ref="player" src="@/assets/playerShip3_blue.png" />
   </div>
   <div>

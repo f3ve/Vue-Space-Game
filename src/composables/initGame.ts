@@ -1,4 +1,4 @@
-import { watchEffect, ref } from 'vue';
+import { watchEffect, ref, watch } from 'vue';
 import { initializeEnemies, initialPlayerPosition, setPosition } from '@/utils/generalHelpers';
 import { Game, DOMRef, ElOrNull } from '@/types';
 import {
@@ -24,6 +24,7 @@ interface usePlayerOutput {
 export default function initGame(gameState: Game): usePlayerOutput {
   const gameRoot = ref<ElOrNull>(null);
   const player = ref<ElOrNull>(null);
+  let requestId = 0;
 
   /**
    * Updates player position based on current delta time
@@ -106,8 +107,8 @@ export default function initGame(gameState: Game): usePlayerOutput {
    */
   function updateGame() {
     if (gameState.won) {
-      // initializeEnemies(gameState, gameRoot);
-      // gameState.won = false;
+      initializeEnemies(gameState, gameRoot);
+      gameState.won = false;
     }
 
     if (gameState.gameOver) {
@@ -151,22 +152,28 @@ export default function initGame(gameState: Game): usePlayerOutput {
       updateEnemyLasers(deltaTime);
       gameState.lastTime = currentTime;
     }
-    window.requestAnimationFrame(updateGame);
+    requestId = window.requestAnimationFrame(updateGame);
   }
 
-  watchEffect(() => {
-    if (!gameState.paused && !gameState.gameOver) {
-      window.requestAnimationFrame(updateGame);
+  function startGame() {
+    if (gameState.start) {
+      initialPlayerPosition({ player, gameState });
+      initializeKeyboardControls(gameState);
+      initializeEnemies(gameState, gameRoot);
+      gameState.lastTime = initialState.lastTime();
+      gameState.start = false;
+    }
+  }
 
-      if (gameState.start) {
-        initialPlayerPosition({ player, gameState });
-        initializeKeyboardControls(gameState);
-        initializeEnemies(gameState, gameRoot);
-        gameState.lastTime = initialState.lastTime();
-        gameState.start = false;
+  watch(
+    () => gameState.paused,
+    (paused) => {
+      if (!paused && !gameState.gameOver) {
+        startGame();
+        requestId = window.requestAnimationFrame(updateGame);
       }
     }
-  });
+  );
 
   return {
     player,
